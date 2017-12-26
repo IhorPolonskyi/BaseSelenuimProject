@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Example suite">
+
+    <parameter name="browser" value="chrome"/>
+    <parameter name="server" value="localhost"/>
+
+    <test name="ChainOfRespExampleTestCase">
+        <classes>
+            <class name="exampletestsuite.ChainOfRespExampleTestCase"/>
+        </classes>
+    </test>
+
+    <test name="PageObjectExampleTestCase">
+        <classes>
+            <class name="exampletestsuite.PageObjectExampleTestCase"/>
+        </classes>
+    </test>
+
+</suite>
