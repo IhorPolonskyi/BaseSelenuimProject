@@ -16,7 +16,12 @@ import static utility.services.ReportService.assertTrue;
 
 public class CookiesService {
 
-    public static String getCookieValue(String cookieName, WebDriver driver){
+    private static WebDriver driver;
+    public CookiesService(WebDriver driver){
+        this.driver = driver;
+    }
+
+    public static String getCookieValue(String cookieName){
         if (driver.manage().getCookieNamed(cookieName)!=null){
             String value = driver.manage().getCookieNamed(cookieName).getValue();
             info("Cookie: \"" + cookieName + "\" has value - \"" + value + "\".");
@@ -29,7 +34,7 @@ public class CookiesService {
 
     }
 
-    public static void deleteCookie(String cookieName, WebDriver driver){
+    public static void deleteCookie(String cookieName){
         if (driver.manage().getCookieNamed(cookieName)!=null){
             driver.manage().deleteCookieNamed(cookieName);
             info("Delete \""+cookieName+"\" cookie.");
@@ -40,17 +45,17 @@ public class CookiesService {
 
     }
 
-    public static boolean verifyCookieIsSet(String cookieName, WebDriver driver){
+    public static boolean verifyCookieIsSet(String cookieName){
         return driver.manage().getCookieNamed(cookieName) != null;
     }
 
-    public static void clearCookies(WebDriver driver){
+    public static void clearCookies(){
         driver.manage().deleteAllCookies();
         info("Delete all cookies.");
-        refreshPage(driver);
+        refreshPage();
     }
 
-    public static void setCookie(String name, String value, WebDriver driver) {
+    public static void setCookie(String name, String value) {
         Cookie cookie = driver.manage().getCookieNamed(name);
 
         driver.manage().deleteCookie(cookie);
@@ -66,7 +71,7 @@ public class CookiesService {
         info("Set cookie " + name + ":" + value);
     }
 
-    public static String getCookieExpireDate(String cookieName, WebDriver driver){
+    public static String getCookieExpireDate(String cookieName){
         DateFormat dateFormat = new SimpleDateFormat("YYYY-MM-dd");
         if (driver.manage().getCookieNamed(cookieName)!=null){
             Date  date = driver.manage().getCookieNamed(cookieName).getExpiry();
@@ -83,7 +88,7 @@ public class CookiesService {
 
     }
 
-    public static void addCookie(String name, String value, WebDriver driver){
+    public static void addCookie(String name, String value){
         Cookie.Builder builder = new Cookie.Builder(name, value);
         Cookie cookie = builder.build();
         driver.manage().addCookie(cookie);
@@ -91,10 +96,9 @@ public class CookiesService {
     }
 
     /**
-     * @param driver
      * @return List names of cookie available on current page
      */
-    public static List<String> getNamesCookies(WebDriver driver){
+    public static List<String> getNamesCookies(){
         return driver.manage().getCookies().stream()
                 .map(Cookie::getName)
                 .collect(Collectors.toList());

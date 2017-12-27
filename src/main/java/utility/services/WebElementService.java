@@ -15,10 +15,14 @@ import static utility.services.PressKeysService.pressBackSpace;
 import static utility.services.ReportService.assertTrue;
 import static utility.services.WaiterService.sleep;
 
-public abstract class WebElementService {
+public class WebElementService {
 
+    private static WebDriver driver;
+    public WebElementService(WebDriver driver){
+        this.driver = driver;
+    }
 
-    public static boolean checkFocusOnElement(WebElement element, String elementName, WebDriver driver){
+    public static boolean checkFocusOnElement(WebElement element, String elementName){
         int attempt_counter = 0;
         while (!element.equals(driver.switchTo().activeElement())){
             sleep(1);
@@ -91,14 +95,14 @@ public abstract class WebElementService {
         }
     }
 
-    public static void clickOnElement(WebElement element, String elementName, WebDriver driver){
+    public static void clickOnElement(WebElement element, String elementName){
 
         try {
             WebDriverWait wait = new WebDriverWait(driver,20);
             wait.until(ExpectedConditions.elementToBeClickable(element));}
         catch (TimeoutException ex){
             info("\"" + elementName + "\" is not clickable.");
-            clickHack(element, elementName, driver);
+            clickHack(element, elementName);
             info("Click on \"" + elementName + "\".");
             return;
         }
@@ -111,10 +115,10 @@ public abstract class WebElementService {
         }
         catch (ElementNotVisibleException e){
             error("ElementNotVisibleException");
-            clickHack(element, elementName, driver);
+            clickHack(element, elementName);
         }
         catch (TimeoutException e){
-            stopLoad(driver);
+            stopLoad();
         }
         catch (StaleElementReferenceException e){
             warn("StaleElementReferenceException.");
@@ -123,11 +127,11 @@ public abstract class WebElementService {
         }
         catch (WebDriverException e){
             error("WebDriverException" +e);
-            clickHack(element, elementName, driver);
+            clickHack(element, elementName);
         }
     }
 
-    private static void clickHack(WebElement element, String elementName, WebDriver driver){
+    private static void clickHack(WebElement element, String elementName){
         boolean flag = true;
         int attempt = 0;
 
@@ -135,8 +139,8 @@ public abstract class WebElementService {
             attempt++;
             try {
                 info("\"" + elementName + "\" is hide by another element, move down.");
-                scrollDown(driver,500);
-                moveToCoordinate(0, 0, driver);
+                scrollDown(500);
+                moveToCoordinate(0, 0);
                 element.click();
                 info("Click on \"" +elementName+"\".");
                 flag = false;
@@ -163,10 +167,10 @@ public abstract class WebElementService {
         }
     }
 
-    public static void sendKeysClear(WebElement element, String elementName, String inputText, WebDriver driver){
+    public static void sendKeysClear(WebElement element, String elementName, String inputText){
 
         try {
-            WaiterService.waitForElementVisible(element, driver);
+            WaiterService.waitForElementVisible(element);
             int attempt = 0;
             element.clear();
             element.sendKeys(inputText);
@@ -196,10 +200,10 @@ public abstract class WebElementService {
         return element.getSize().getWidth();
     }
 
-    public static void moveToElement(WebElement element, String elementName, WebDriver driver) {
+    public static void moveToElement(WebElement element, String elementName) {
 
         try {
-            WaiterService.waitForElementVisible(element,driver);
+            WaiterService.waitForElementVisible(element);
             Actions actions = new Actions(driver);
             actions.moveToElement(element).build().perform();
             sleep(1);
@@ -213,10 +217,10 @@ public abstract class WebElementService {
         }
     }
 
-    public static void clickAndHoldElement(WebElement element, String elementName, WebDriver driver) {
+    public static void clickAndHoldElement(WebElement element, String elementName) {
 
         try {
-            WaiterService.waitForElementVisible(element,driver);
+            WaiterService.waitForElementVisible(element);
             new Actions(driver).clickAndHold(element).build().perform();
             sleep(1);
             info("\"" + elementName + "\" is hold.");
@@ -253,7 +257,7 @@ public abstract class WebElementService {
         }
     }
 
-    public static WebElement getElement(By locator, WebDriver driver){
+    public static WebElement getElement(By locator){
         WebElement element = null;
         boolean flag  = true;
         int attempt = 0;
@@ -284,7 +288,7 @@ public abstract class WebElementService {
         info("\""+elementName+"\" field clear.");
     }
 
-    public static void moveToCoordinate(int x, int y, WebDriver driver) {
+    public static void moveToCoordinate(int x, int y) {
 
         Actions actions = new Actions(driver);
         actions.moveByOffset(x, y).build().perform();
@@ -345,13 +349,13 @@ public abstract class WebElementService {
      *
      * @param element input on page
      */
-    public static void clearFieldManual(WebElement element, WebDriver driver) {
+    public static void clearFieldManual(WebElement element) {
 
         int countChar = getElementValue(element, element.toString()).length();
         int i = 0;
         while (i<countChar){
             i++;
-            clickOnElement(element,"element", driver);
+            clickOnElement(element,"element");
             pressBackSpace(element);
         }
     }

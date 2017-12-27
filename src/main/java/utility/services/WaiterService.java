@@ -20,7 +20,12 @@ import static utility.services.WebElementService.*;
 @Log4j
 public class WaiterService {
 
-    public static void waitForCookie(String cookieName, WebDriver driver){
+    private static WebDriver driver;
+    public WaiterService(WebDriver driver){
+        this.driver = driver;
+    }
+
+    public static void waitForCookie(String cookieName){
 
         int attempt_counter = 0;
         while (driver.manage().getCookieNamed(cookieName)==null ||
@@ -34,7 +39,7 @@ public class WaiterService {
         }
     }
 
-    public static void waitForCookieUnset(String cookieName, WebDriver driver){
+    public static void waitForCookieUnset(String cookieName){
 
         WebDriverWait wait = new WebDriverWait(driver, ELEMENT_TIMEOUT);
         wait.until((WebDriver webDriver) -> driver.manage().getCookieNamed(cookieName)==null);
@@ -56,7 +61,7 @@ public class WaiterService {
         }
     }
 
-    public static void waitForTextVisible(String text, WebElement element, WebDriver driver) {
+    public static void waitForTextVisible(String text, WebElement element) {
 
         try {
             WebDriverWait wait = new WebDriverWait(driver,40);
@@ -90,11 +95,11 @@ public class WaiterService {
         }
     }
 
-    public  static void pageReadyStateLoaderWait(WebDriver driver){
-        pageReadyStateLoaderWait(driver, Constants.PAGE_TIMEOUT);
+    public  static void pageReadyStateLoaderWait(){
+        pageReadyStateLoaderWait(Constants.PAGE_TIMEOUT);
     }
 
-    public static void pageReadyStateLoaderWait(WebDriver driver, int timeout) {
+    public static void pageReadyStateLoaderWait(int timeout) {
 
         try {
             new WebDriverWait(driver, timeout).until((WebDriver webDriver) ->
@@ -104,7 +109,7 @@ public class WaiterService {
         }
     }
 
-    public static void waitForElementVisible(WebElement element, WebDriver driver) {
+    public static void waitForElementVisible(WebElement element) {
 
         try {
             WebDriverWait wait = new WebDriverWait(driver,20);
@@ -119,7 +124,7 @@ public class WaiterService {
 
     }
 
-    public static void waitForElementVisible(WebElement element, int delay, WebDriver driver) {
+    public static void waitForElementVisible(WebElement element, int delay) {
 
         try {
             WebDriverWait wait = new WebDriverWait(driver,delay);
@@ -140,7 +145,7 @@ public class WaiterService {
         }
     }
 
-    public  static void waitForCookieValue(String cookie, String value, WebDriver driver){
+    public  static void waitForCookieValue(String cookie, String value){
 
         int attempt = 0;
         boolean flag = true;
@@ -169,12 +174,12 @@ public class WaiterService {
         }
     }
 
-    public static void waitPageLoader(String url, WebDriver driver) {
-        waitPageLoader(url, Constants.PAGE_TIMEOUT, driver);
-        pageReadyStateLoaderWait(driver);
+    public static void waitPageLoader(String url) {
+        waitPageLoader(url, Constants.PAGE_TIMEOUT);
+        pageReadyStateLoaderWait();
     }
 
-    public static void waitPageLoader(String url, int seconds, WebDriver driver) {
+    public static void waitPageLoader(String url, int seconds) {
 
         try {
             info("Waiting for \"" + url + "\" page.");
@@ -189,7 +194,7 @@ public class WaiterService {
                         "                                   Current url:" + driver.getCurrentUrl());
             }
         } catch (TimeoutException e) {
-            ManageUrlService.stopLoad(driver);
+            ManageUrlService.stopLoad();
         }
     }
 
@@ -208,7 +213,7 @@ public class WaiterService {
         }
     }
 
-    public static void waitForAttributeValue(final WebElement element, final String attribute, final String text, WebDriver driver){
+    public static void waitForAttributeValue(final WebElement element, final String attribute, final String text){
 
         try {
             WebDriverWait wait = new WebDriverWait(driver,Constants.PAGE_TIMEOUT);
@@ -225,7 +230,7 @@ public class WaiterService {
         }
     }
 
-    public static void waitPageLoader(WebDriver driver){
+    public static void waitPageLoader(){
 
         try {
             info("Waiting for change url.");
@@ -243,7 +248,7 @@ public class WaiterService {
         }
     }
 
-    public static void waitForElementIsSelected(WebElement el, WebDriver driver) {
+    public static void waitForElementIsSelected(WebElement el) {
 
         try {
             WebDriverWait wait = new WebDriverWait(driver, ELEMENT_TIMEOUT);
@@ -253,7 +258,7 @@ public class WaiterService {
         }
     }
 
-    public static void waitForChangeUrl(WebDriver driver, final String urlPart) {
+    public static void waitForChangeUrl(final String urlPart) {
 
         try {
             WebDriverWait wait = new WebDriverWait(driver, 10);
@@ -269,7 +274,7 @@ public class WaiterService {
         }
     }
 
-    public static void waitForElementClickable(WebElement element, WebDriver driver) {
+    public static void waitForElementClickable(WebElement element) {
 
         try {
             WebDriverWait wait = new WebDriverWait(driver,20);
@@ -283,7 +288,7 @@ public class WaiterService {
         }
     }
 
-    public static void waitForAttributeAppear(WebDriver driver, WebElement element, String attrName){
+    public static void waitForAttributeAppear(WebElement element, String attrName){
 
         try {
             WebDriverWait wait = new WebDriverWait(driver, ELEMENT_TIMEOUT);
@@ -294,7 +299,7 @@ public class WaiterService {
         }
     }
 
-    public static void waitForAttributeValueNotEmpty(WebDriver driver, WebElement element, String attrName) {
+    public static void waitForAttributeValueNotEmpty(WebElement element, String attrName) {
 
         WebDriverWait wait = new WebDriverWait(driver, ELEMENT_TIMEOUT);
         wait.withMessage("Failed to wait for attribute " + attrName + " is not empty.");
@@ -302,7 +307,7 @@ public class WaiterService {
 
     }
 
-    public static void waitJqueryComplete(WebDriver driver,long timeout){
+    public static void waitJqueryComplete(long timeout){
 
         WebDriverWait wait = new WebDriverWait(driver, timeout);
         try {
@@ -314,9 +319,8 @@ public class WaiterService {
 
     /** The method waiting when text is change on element.
      * @param element WebElement in which text should be change.
-     * @param driver WebDriver
      */
-    public static void waitForElementTextIsChange(WebElement element, String newText, WebDriver driver){
+    public static void waitForElementTextIsChange(WebElement element, String newText){
 
         try {
             (new WebDriverWait(driver, ELEMENT_TIMEOUT))
@@ -328,9 +332,8 @@ public class WaiterService {
 
     /** The method waiting when text is appear on element.
      * @param element WebElement in which text should be present.
-     * @param driver WebDriver
      */
-    public static void waitForElementTextIsPresent(WebElement element, WebDriver driver){
+    public static void waitForElementTextIsPresent(WebElement element){
 
         try {
             (new WebDriverWait(driver, ELEMENT_TIMEOUT))
@@ -340,7 +343,7 @@ public class WaiterService {
         }
     }
 
-    public static void waitForElementNotVisible(WebElement element, int delay, WebDriver driver) {
+    public static void waitForElementNotVisible(WebElement element, int delay) {
 
         if (elementIsDisplayed(element, "")) {
             info("Wait for element will not be displayed in " + delay + " seconds.");
@@ -355,7 +358,7 @@ public class WaiterService {
         }
     }
 
-    public static void waitForTextVisible(String text, WebElement element, int delay, WebDriver driver) {
+    public static void waitForTextVisible(String text, WebElement element, int delay) {
 
         try {
             WebDriverWait wait = new WebDriverWait(driver,delay);
@@ -371,7 +374,7 @@ public class WaiterService {
 
     }
 
-    public static void waitForElementChangePosition(WebElement element, int x, int y, WebDriver driver) {
+    public static void waitForElementChangePosition(WebElement element, int x, int y) {
         info("Wait for element will change position in " + ELEMENT_TIMEOUT + " seconds.");
         try {
             WebDriverWait wait = new WebDriverWait(driver, ELEMENT_TIMEOUT);

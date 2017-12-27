@@ -16,7 +16,12 @@ import static utility.services.WebElementService.moveToCoordinate;
 
 public class ManageUrlService {
 
-    public static void getDirectlyURL(String url, WebDriver driver) {
+    private static WebDriver driver;
+    public ManageUrlService(WebDriver driver){
+        this.driver = driver;
+    }
+
+    public static void getDirectlyURL(String url) {
         driver.getCurrentUrl();
         info("Navigate to \""+url+"\".");
         try {
@@ -24,29 +29,29 @@ public class ManageUrlService {
             driver.get(url);
 
             info("Navigate to \""+url+"\" finished.");
-            moveToCoordinate(0,0,driver);
+            moveToCoordinate(0,0);
         }
         catch (TimeoutException e){
-            stopLoad(driver);
+            stopLoad();
         }
     }
 
-    public  static void refreshPage(WebDriver driver){
+    public  static void refreshPage(){
         try {
             driver.navigate().refresh();
             info("Page was refreshed.");
         }
         catch (WebDriverException e){
-            stopLoad(driver);
+            stopLoad();
         }
     }
 
-    public  static String getCurrentURL(WebDriver driver){
+    public  static String getCurrentURL(){
         info("Current URL:"+driver.getCurrentUrl());
         return driver.getCurrentUrl();
     }
 
-    public static void switchToFrame(String frameId, WebDriver driver){
+    public static void switchToFrame(String frameId){
         int attempt=0;
         boolean flag = true;
         while (flag && attempt<10){
@@ -62,7 +67,7 @@ public class ManageUrlService {
         }
     }
 
-    public static void switchToFrame(int frameIndex, WebDriver driver){
+    public static void switchToFrame(int frameIndex){
         List<WebElement> frames = driver.findElements(By.tagName("frame"));
         int attemptCounter = 0;
         while (frames.size()<=frameIndex){
@@ -79,7 +84,7 @@ public class ManageUrlService {
 
     }
 
-    public static void switchToIframe(int frameIndex, WebDriver driver){
+    public static void switchToIframe(int frameIndex){
         List<WebElement> frames = driver.findElements(By.tagName("iframe"));
         int attemptCounter = 0;
         while (frames.size()<=frameIndex){
@@ -96,16 +101,16 @@ public class ManageUrlService {
 
     }
 
-    public static String getWindow(WebDriver driver){
+    public static String getWindow(){
         return driver.getWindowHandle();
     }
 
-    public static void switchToWindow(String windowName, WebDriver driver){
+    public static void switchToWindow(String windowName){
         info("Switch to \""+windowName+"\" window.");
         driver.switchTo().window(windowName);
     }
 
-    public static void switchToWindow(WebDriver driver){
+    public static void switchToWindow(){
         for (String win:driver.getWindowHandles()){
             driver.switchTo().window(win);
         }
@@ -114,7 +119,7 @@ public class ManageUrlService {
         info("Maximize window.");
     }
 
-    public static void switchToLastWindow(WebDriver driver){
+    public static void switchToLastWindow(){
         try {
             WebDriverWait wait = new WebDriverWait(driver, 5);
             wait.until(new ExpectedCondition<Boolean>() {
@@ -135,7 +140,7 @@ public class ManageUrlService {
         info("Maximize window.");
     }
 
-    public static void switchToLastWindowClose(WebDriver driver){
+    public static void switchToLastWindowClose(){
         try {
             WebDriverWait wait = new WebDriverWait(driver, 5);
             wait.until(new ExpectedCondition<Boolean>() {
@@ -165,7 +170,7 @@ public class ManageUrlService {
     }
 
 
-    public static int countWindows(WebDriver driver){
+    public static int countWindows(){
         int counter = 0;
         for (String win :driver.getWindowHandles()){
             counter++;
@@ -174,73 +179,73 @@ public class ManageUrlService {
         return counter;
     }
 
-    public static void closeWindow(WebDriver driver){
+    public static void closeWindow(){
         driver.close();
         info("Close current window.");
     }
 
-    public  static void openNewWindow(WebDriver driver){
+    public  static void openNewWindow(){
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("window.open('');");
         info("Open new window.");
     }
 
-    public static void navigateBack (WebDriver driver){
+    public static void navigateBack (){
         try {
             driver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
             driver.navigate().back();
             info("Returned to the previous page.");
         }
         catch (TimeoutException e){
-            stopLoad(driver);
+            stopLoad();
         }
 
     }
 
-    public static String getTitle(WebDriver driver){
+    public static String getTitle(){
         info("Page title: \""+driver.getTitle()+"\".");
         return driver.getTitle();
     }
 
-    public  static String getHeading(WebDriver driver, String tag){
+    public  static String getHeading(String tag){
         String heading = driver.findElement(By.tagName(tag)).getText();
         info(tag+" heading text: "+heading);
         return heading;
     }
 
 
-    public static void scrollDown(WebDriver driver){
+    public static void scrollDown(){
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("window.scrollBy(0,document.body.scrollHeight)", "");
     }
 
-    public static void switchToContent(WebDriver driver){
+    public static void switchToContent(){
         driver.switchTo().defaultContent();
         info("Switch to default content.");
     }
 
-    public static void stopLoad(WebDriver driver){
+    public static void stopLoad(){
         driver.findElement(By.tagName("body")).sendKeys(Keys.ESCAPE);
         info("Timeout on loading page \""+driver.getCurrentUrl()+"\".");
     }
 
-    public static void resizeWindow(Dimension dimension, WebDriver driver){
+    public static void resizeWindow(Dimension dimension){
         driver.manage().window().setSize(dimension);
         info("Resize window to "+dimension+" size.");
     }
 
-    public static void scrollUp(WebDriver driver, int px){
+    public static void scrollUp(int px){
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("window.scrollBy(0,-"+px+")", "");
     }
 
-    public static void switchToIframe(WebElement frame, WebDriver driver){
+    public static void switchToIframe(WebElement frame){
         driver.switchTo().frame(frame);
         info("Switch to "+frame+" iframe.");
 
     }
 
-    public static void scrollDown(WebDriver driver, int px){
+    public static void scrollDown(int px){
         JavascriptExecutor executor = (JavascriptExecutor)driver;
         executor.executeScript("window.scrollBy(0,"+px+")", "");
     }

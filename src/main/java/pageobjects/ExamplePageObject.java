@@ -31,7 +31,7 @@ public class ExamplePageObject {
     public List<WebElement> resultsLinks;
 
     public void insertSearchRequest(String text) {
-        sendKeysClear(searchField, "Search Field", text, driver);
+        sendKeysClear(searchField, "Search Field", text);
     }
 
     public void pressEnterOnSearchField() {
@@ -47,10 +47,10 @@ public class ExamplePageObject {
     }
 
     public void waitForSearchResults() {
-        waitForElementVisible(resultsLinks.get(0), driver);
+        waitForElementVisible(resultsLinks.get(0));
     }
 
     public void waitPageLoad(String url){
-        waitPageLoader(url, driver);
+        waitPageLoader(url);
     }
 }

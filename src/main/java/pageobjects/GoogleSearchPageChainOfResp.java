@@ -34,12 +34,12 @@ public class GoogleSearchPageChainOfResp{
     private List<WebElement> resultsLinks;
 
     public GoogleSearchPageChainOfResp getUrl(String url) {
-        getDirectlyURL(url, driver);
+        getDirectlyURL(url);
         return this;
     }
 
     public GoogleSearchPageChainOfResp insertSearchRequest(String text) {
-        sendKeysClear(searchField, "Search Field", text, driver);
+        sendKeysClear(searchField, "Search Field", text);
         return this;
     }
 
@@ -57,12 +57,12 @@ public class GoogleSearchPageChainOfResp{
     }
 
     public GoogleSearchPageChainOfResp waitForSearchResults() {
-        waitForElementVisible(resultsLinks.get(0), driver);
+        waitForElementVisible(resultsLinks.get(0));
         return this;
     }
 
     public GoogleSearchPageChainOfResp waitPageLoad(String url){
-        waitPageLoader(url, driver);
+        waitPageLoader(url);
         return this;
     }
 }

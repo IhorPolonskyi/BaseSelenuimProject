@@ -1,6 +1,5 @@
 package exampletestsuite;
 
-import businessobjects.User;
 import org.testng.annotations.Test;
 import pageobjects.GoogleSearchPageChainOfResp;
 import service.BaseTestCase;

@@ -24,8 +24,8 @@ public class PageObjectExampleTestCase extends BaseTestCase {
         ExamplePageObject examplePageObject = initElements(driver, ExamplePageObject.class);
 
         //get google index page
-        getDirectlyURL(Constants.URL, driver);
-        waitPageLoader(Constants.URL, driver);
+        getDirectlyURL(Constants.URL);
+        waitPageLoader(Constants.URL);
 
         //insert search request
         examplePageObject.insertSearchRequest(texts.get("searchText"));
@@ -34,7 +34,7 @@ public class PageObjectExampleTestCase extends BaseTestCase {
         examplePageObject.pressEnterOnSearchField();
 
         //wait for search results
-        waitForElementVisible(examplePageObject.resultsLinks.get(0), driver);
+        waitForElementVisible(examplePageObject.resultsLinks.get(0));
 
         //assert that first search result is correct
         assertEquals(examplePageObject.getSearchResultsWebElementTexts().get(0), searchRequestText,
