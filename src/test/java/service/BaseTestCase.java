@@ -26,13 +26,15 @@ public class BaseTestCase {
     public WebElementService webElementService;
     protected String testCaseName = this.getClass().getSimpleName();
 
-    @Parameters({"browser","server"})
+    @Parameters({"browser","server","port"})
     @BeforeTest
-    public void runBrowser(@Optional("chrome") String browserValue, @Optional("localhost") String gridValue) throws MalformedURLException {
+    public void runBrowser(@Optional("chrome") String browserValue,
+                           @Optional("localhost") String gridValue,
+                           @Optional("4444") String port) throws MalformedURLException {
 
         Log.info("TestCase: \"" + testCaseName + "\" started");
 
-        driver = getDriverInstance(browserValue, getGrid(gridValue));
+        driver = getDriverInstance(browserValue, getGrid(gridValue, port));
 
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(60, TimeUnit.SECONDS);
@@ -46,8 +48,8 @@ public class BaseTestCase {
         Log.info("TestCase: \"" + testCaseName + "\" finished \n");
     }
 
-    private String getGrid(String gridValue) {
-        return "http://" + gridValue + ":4444/wd/hub";
+    private String getGrid(String gridValue, String port) {
+        return "http://" + gridValue + ":" + port + "/wd/hub";
     }
 
     private void getServiceConstructors(){
