@@ -40,7 +40,7 @@ public class FileReaderService {
     }
 
     public static Object[][] dataProviderFile(String filePath){
-        List<String> emails = listReader(filePath);
+        List<String> emails = listReader("src/test/resources/properties/" + filePath);
         Object[][] objects = new Object[emails.size()][1];
         for (int i = 0; i < emails.size(); i++) {
             objects[i][0] = emails.get(i);

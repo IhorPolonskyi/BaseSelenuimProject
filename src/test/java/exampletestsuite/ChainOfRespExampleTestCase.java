@@ -4,6 +4,8 @@ import org.testng.annotations.Test;
 import pageobjects.GoogleSearchPageChainOfResp;
 import service.BaseTestCase;
 import utility.Constants;
+import utility.DataProviders;
+import utility.Log;
 
 import static exampletestsuite.HelpMethods.searchRequestText;
 import static org.openqa.selenium.support.PageFactory.initElements;
@@ -14,9 +16,10 @@ import static utility.services.ReportService.assertEquals;
  */
 public class ChainOfRespExampleTestCase extends BaseTestCase {
 
-    @Test
-    public void test_001_successSearch() {
+    @Test(dataProviderClass = DataProviders.class,dataProvider = "validEmail")
+    public void test_001_successSearch(String loginMethod) {
 
+        Log.info(loginMethod);
         GoogleSearchPageChainOfResp googleSearchPageChainOfResp = initElements(driver, GoogleSearchPageChainOfResp.class)
                 .getUrl(Constants.URL)
                 .waitPageLoad(Constants.URL)

@@ -4,12 +4,12 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.LinkedList;
+
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static utility.services.PressKeysService.pressEnter;
 import static utility.services.WaiterService.waitForElementVisible;
-import static utility.services.WaiterService.waitPageLoader;
 import static utility.services.WebElementService.getElementText;
 import static utility.services.WebElementService.sendKeysClear;
 
@@ -39,18 +39,13 @@ public class ExamplePageObject {
     }
 
     public List<String> getSearchResultsWebElementTexts() {
-        List<String> list = new LinkedList<>();
-        resultsLinks.forEach(element ->{
-            list.add(getElementText(element, "Search result text"));
-        });
-        return list;
+        return resultsLinks.stream()
+                .map(element -> getElementText(element, "Search result text"))
+                .collect(Collectors.toList());
     }
 
     public void waitForSearchResults() {
         waitForElementVisible(resultsLinks.get(0));
     }
 
-    public void waitPageLoad(String url){
-        waitPageLoader(url);
-    }
 }

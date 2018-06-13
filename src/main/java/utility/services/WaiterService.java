@@ -22,7 +22,7 @@ public class WaiterService {
 
     private static WebDriver driver;
     public WaiterService(WebDriver driver){
-        this.driver = driver;
+        WaiterService.driver = driver;
     }
 
     public static void waitForCookie(String cookieName){

@@ -7,6 +7,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static utility.services.ManageUrlService.getDirectlyURL;
 import static utility.services.PressKeysService.pressEnter;
@@ -49,11 +50,9 @@ public class GoogleSearchPageChainOfResp{
     }
 
     public List<String> getSearchResultsWebElementTexts() {
-        List<String> list = new LinkedList<>();
-        resultsLinks.forEach(element ->{
-            list.add(getElementText(element, "Search result text"));
-        });
-        return list;
+        return resultsLinks.stream()
+                .map(element -> getElementText(element, "Search result text"))
+                .collect(Collectors.toList());
     }
 
     public GoogleSearchPageChainOfResp waitForSearchResults() {

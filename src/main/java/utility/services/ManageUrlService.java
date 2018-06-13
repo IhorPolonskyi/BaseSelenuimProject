@@ -36,7 +36,7 @@ public class ManageUrlService {
         }
     }
 
-    public  static void refreshPage(){
+    public static void refreshPage(){
         try {
             driver.navigate().refresh();
             info("Page was refreshed.");
@@ -46,7 +46,7 @@ public class ManageUrlService {
         }
     }
 
-    public  static String getCurrentURL(){
+    public static String getCurrentURL(){
         info("Current URL:"+driver.getCurrentUrl());
         return driver.getCurrentUrl();
     }

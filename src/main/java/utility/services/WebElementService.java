@@ -19,7 +19,7 @@ public class WebElementService {
 
     private static WebDriver driver;
     public WebElementService(WebDriver driver){
-        this.driver = driver;
+        WebElementService.driver = driver;
     }
 
     public static boolean checkFocusOnElement(WebElement element, String elementName){

@@ -29,6 +29,10 @@ public class HttpClient {
     public HttpClient() {
     }
 
+    public static boolean isResponseSuccessful(Response response) {
+        return Response.Status.Family.familyOf(response.getStatus()) == Response.Status.Family.SUCCESSFUL;
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> T convertResponseToClass(Response response, Class<T> clazz) {
         response.bufferEntity();
@@ -92,21 +96,48 @@ public class HttpClient {
         return this;
     }
 
-    public HttpClient link(String url, String linkUrl) {
-        post(url, new Form());
-        header("X-HTTP-Method-Override", "LINK");
-        header("LINK", linkUrl);
+    //TODO fix OkHttpClient dependency
+   /* public HttpClient link(String url, String linkUrl) {
+        OkHttpClient client = new OkHttpClient();
+
+        com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
+                .url(url)
+                .method("LINK", null)
+                .addHeader("content-type", "application/x-www-form-urlencoded")
+                .addHeader("link", linkUrl)
+                .build();
+
+        try {
+            client.newCall(request).execute();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return this;
-    }
 
-    public HttpClient unlink(String url, String unlinkUrl) {
-        post(url, new Form());
-        header("X-HTTP-Method-Override", "UNLINK");
-        header("link", unlinkUrl);
+    }*/
+
+    //TODO fix OkHttpClient dependency
+   /* public HttpClient unlink(String url, String unlinkUrl) {
+        OkHttpClient client = new OkHttpClient();
+
+        com.squareup.okhttp.Request request = new com.squareup.okhttp.Request.Builder()
+                .url(url)
+                .method("UNLINK", null)
+                .addHeader("content-type", "application/x-www-form-urlencoded")
+                .addHeader("link", unlinkUrl)
+                .build();
+
+        try {
+            client.newCall(request).execute();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
 
         return this;
-    }
+    }*/
 
     public HttpClient post(String url, Form form) {
         post(url, form.asMap());
@@ -176,6 +207,24 @@ public class HttpClient {
         }
     }
 
+    public Response getResponse(String contentType, boolean withLogging) {
+        try {
+            headers.putAll(getDefaultHeaders(contentType));
+            if(withLogging)
+                log.info("Perform " + method + " request to " + url);
+            return getHttpClient().target(url).
+                    request().
+                    headers(headers).
+                    build(method, Entity.entity(parameters, (String) headers.getFirst(CONTENT_TYPE))).
+                    invoke();
+        } finally {
+            if (parameters != null) {
+                parameters.clear();
+            }
+            headers.clear();
+        }
+    }
+
     public Response getResponse(boolean withLogging) {
         try {
             headers.putAll(getDefaultHeaders());
@@ -214,6 +263,14 @@ public class HttpClient {
         MultivaluedMap<String, Object> defaultHeaders = new MultivaluedHashMap<>();
         defaultHeaders.add(ACCEPT, APPLICATION_JSON);
         defaultHeaders.add(CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED);
+
+        return defaultHeaders;
+    }
+
+    private MultivaluedMap<String, Object> getDefaultHeaders(String mediaType) {
+        MultivaluedMap<String, Object> defaultHeaders = new MultivaluedHashMap<>();
+        defaultHeaders.add(ACCEPT, APPLICATION_JSON);
+        defaultHeaders.add(CONTENT_TYPE, mediaType);
 
         return defaultHeaders;
     }
