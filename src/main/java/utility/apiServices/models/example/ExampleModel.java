@@ -8,7 +8,7 @@ import utility.apiServices.models.example.ExampleProperties;
 import java.util.List;
 
 @Data
-@JsonIgnoreProperties(value = {"_links"}, ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ExampleModel {
 
     @JsonProperty(value = "USER_ID")

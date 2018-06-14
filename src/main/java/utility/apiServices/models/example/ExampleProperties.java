@@ -5,8 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-@JsonIgnoreProperties(value = "_links", ignoreUnknown = true)
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ExampleProperties {
 
     private int id;
